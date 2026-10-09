@@ -170,12 +170,5 @@ client_scripts {
     , "dlc_money/office.lua"
     , "dlc_money/construction.lua"
 
-    -- DLC A Safehouse in the Hills (Requires forced build 3717 or higher)
-    , "dlc_mansions/base.lua"
-    , "dlc_mansions/mansion1.lua"
-    , "dlc_mansions/mansion2.lua"
-    , "dlc_mansions/mansion3.lua"
-    , "dlc_mansions/mansion_basement1.lua"
-    , "dlc_mansions/mansion_basement2.lua"
-    , "dlc_mansions/mansion_basement3.lua"
+    -- DLC A Safehouse in the Hills: not loaded on Héritage RP (Heritage-RP/PRODUCTION-SERVER#82)
 }
