@@ -4,6 +4,15 @@ The purpose of this script is to fix the holes in the map by loading zones that 
 
 This resource has been completely rewritten from scratch since v2.0. You can customize almost every storymode and online purchasable interiors from your own resources.
 
+## Héritage RP fork
+
+- **A Safehouse in the Hills**: the villas are not part of the Héritage RP map. `dlc_mansions/*.lua` are not loaded and
+  `hrp/mansions.lua` removes their IPLs (`RemoveIpl`) whenever they are active, checked every 30 s (build 3717+). The
+  road piece `hei_ch1_roads_mansion` is kept on purpose.
+- **Logs**: no `print`; warnings and errors go through `HrpLog` (`@hrp-metrics/lib/log.lua`, first client script; it
+  loads even when hrp-metrics starts later).
+- **Tests**: `docker run --rm -v "$PWD":/w -w /w nickblah/lua:5.4 lua tests/lua/mansions_spec.lua`
+
 ## Download
 - Latest version: https://github.com/Bob74/bob74_ipl/releases/latest
 

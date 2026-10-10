@@ -116,7 +116,7 @@ FinanceOffice1 = {
             elseif doorSide:lower() == "right" then
                 FinanceOffice1.Safe.isRightDoorOpen = true
             else
-                print("[bob74_ipl] Warning: " .. doorSide .. " is not a correct value. Valid values are: left right")
+                HrpLog.warn(doorSide .. " is not a correct value. Valid values are: left right")
             end
         end,
         Close = function(doorSide)
@@ -125,7 +125,7 @@ FinanceOffice1 = {
             elseif doorSide:lower() == "right" then
                 FinanceOffice1.Safe.isRightDoorOpen = false
             else
-                print("[bob74_ipl] Warning: " .. doorSide .. " is not a correct value. Valid values are: left right")
+                HrpLog.warn(doorSide .. " is not a correct value. Valid values are: left right")
             end
         end,
 
@@ -150,7 +150,7 @@ FinanceOffice1 = {
             end
 
             if doorHandle == 0 then
-                print("[bob74_ipl] Warning: " .. doorSide .. " safe door handle is 0")
+                HrpLog.warn(doorSide .. " safe door handle is 0")
                 return
             end
 

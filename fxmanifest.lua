@@ -8,7 +8,8 @@ version '2.6.0'
 lua54 "yes"
 
 client_scripts {
-    "lib/common.lua"
+    "@hrp-metrics/lib/log.lua" -- HrpLog: structured logs (PRODUCTION-SERVER docs/dev/logs.md); loads even before hrp-metrics starts
+    , "lib/common.lua"
     , "lib/observers/interiorIdObserver.lua"
     , "lib/observers/officeSafeDoorHandler.lua"
     , "lib/observers/officeCullHandler.lua"
@@ -170,5 +171,6 @@ client_scripts {
     , "dlc_money/office.lua"
     , "dlc_money/construction.lua"
 
-    -- DLC A Safehouse in the Hills: not loaded on Héritage RP (Heritage-RP/PRODUCTION-SERVER#82)
+    -- DLC A Safehouse in the Hills: not loaded on Héritage RP, and removed if active (Heritage-RP/PRODUCTION-SERVER#82, #332)
+    , "hrp/mansions.lua"
 }

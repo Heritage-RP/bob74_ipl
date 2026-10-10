@@ -257,10 +257,10 @@ function GetPedheadshotTexture(ped)
         local IsTextureDictLoaded = LoadStreamedTextureDict(textureDict)
 
         if not IsTextureDictLoaded then
-            print("ERROR: GetPedheadshotTexture - Textures dictionnary \"" .. tostring(textureDict) .. "\" cannot be loaded.")
+            HrpLog.error("GetPedheadshotTexture - Textures dictionnary \"" .. tostring(textureDict) .. "\" cannot be loaded.")
         end
     else
-        print("ERROR: GetPedheadshotTexture - PedHeadShot not ready.")
+        HrpLog.error("GetPedheadshotTexture - PedHeadShot not ready.")
     end
 
     return textureDict
