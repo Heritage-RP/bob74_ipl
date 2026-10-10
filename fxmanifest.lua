@@ -171,6 +171,6 @@ client_scripts {
     , "dlc_money/office.lua"
     , "dlc_money/construction.lua"
 
-    -- DLC A Safehouse in the Hills: not loaded on Héritage RP, and removed if active (Heritage-RP/PRODUCTION-SERVER#82, #332)
+    -- DLC A Safehouse in the Hills: villas not loaded on Héritage RP, pre-DLC map restored on their lots (Heritage-RP/PRODUCTION-SERVER#82, #332, #367)
     , "hrp/mansions.lua"
 }
