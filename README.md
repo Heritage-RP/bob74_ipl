@@ -14,7 +14,7 @@ This resource has been completely rewritten from scratch since v2.0. You can cus
   the lots: loading neither the villa nor the original IPLs leaves a hole (Heritage-RP/PRODUCTION-SERVER#367).
 - **Logs**: no `print`; warnings and errors go through `HrpLog` (`@hrp-metrics/lib/log.lua`, first client script; it
   loads even when hrp-metrics starts later).
-- **Tests**: `docker run --rm -v "$PWD":/w -w /w nickblah/lua:5.4 lua tests/lua/mansions_spec.lua`
+- **Tests**: `tests/run.sh` (every `tests/lua/*_spec.lua` in Lua 5.4 through docker; run by `just test` in PRODUCTION-SERVER)
 
 ## Download
 - Latest version: https://github.com/Bob74/bob74_ipl/releases/latest
