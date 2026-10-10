@@ -6,9 +6,12 @@ This resource has been completely rewritten from scratch since v2.0. You can cus
 
 ## Héritage RP fork
 
-- **A Safehouse in the Hills**: the villas are not part of the Héritage RP map. `dlc_mansions/*.lua` are not loaded and
-  `hrp/mansions.lua` removes their IPLs (`RemoveIpl`) whenever they are active, checked every 30 s (build 3717+). The
-  road piece `hei_ch1_roads_mansion` is kept on purpose.
+- **A Safehouse in the Hills**: the villas are not part of the Héritage RP map; their three lots show the pre-DLC map.
+  `dlc_mansions/*.lua` are not loaded, and `hrp/mansions.lua` (build 3717+, at start then every 30 s) does what the
+  game's `building_controller` script does to bring the old map back: `RemoveIpl` on the 57 villa IPLs (including
+  `*_mansion_generic` and `hei_ch1_roads_mansion`), `RequestIpl` on the 12 `*_original` IPLs (terrain, collision, props,
+  `hei_ch1_roads_original`), minimap components 20-22 hidden. From build 3717 the base map has no ground of its own on
+  the lots: loading neither the villa nor the original IPLs leaves a hole (Heritage-RP/PRODUCTION-SERVER#367).
 - **Logs**: no `print`; warnings and errors go through `HrpLog` (`@hrp-metrics/lib/log.lua`, first client script; it
   loads even when hrp-metrics starts later).
 - **Tests**: `docker run --rm -v "$PWD":/w -w /w nickblah/lua:5.4 lua tests/lua/mansions_spec.lua`
