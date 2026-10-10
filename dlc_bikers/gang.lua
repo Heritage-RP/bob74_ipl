@@ -199,10 +199,10 @@ BikerGang = {
                     local IsTextureDictLoaded = LoadStreamedTextureDict(member.textureDict)
 
                     if not IsTextureDictLoaded then
-                        print("ERROR: BikerClubhouseDrawMembers - Textures dictionnary \"" .. tostring(member.textureDict) .. "\" cannot be loaded.")
+                        HrpLog.error("BikerClubhouseDrawMembers - Textures dictionnary \"" .. tostring(member.textureDict) .. "\" cannot be loaded.")
                     end
                 else
-                    print("ERROR: BikerClubhouseDrawMembers - PedHeadShot not ready.")
+                    HrpLog.error("BikerClubhouseDrawMembers - PedHeadShot not ready.")
                 end
             end,
             Clear = function(member)
@@ -347,7 +347,7 @@ BikerGang = {
 
             Init = function()
                 if not DrawEmptyRect(BikerGang.Clubhouse.MissionsWall.target, BikerGang.Clubhouse.MissionsWall.prop) then
-                    print("ERROR: BikerGang.Clubhouse.MissionsWall.Init() - DrawEmptyRect - Timeout")
+                    HrpLog.error("BikerGang.Clubhouse.MissionsWall.Init() - DrawEmptyRect - Timeout")
                 end
             end,
             Enable = function(state)
@@ -549,7 +549,7 @@ function DrawEmblem(texturesDict, rotation)
         local IsTextureDictLoaded = LoadStreamedTextureDict(texturesDict)
 
         if not IsTextureDictLoaded then
-            print("ERROR: DrawEmblem - Textures dictionnary cannot be loaded.")
+            HrpLog.error("DrawEmblem - Textures dictionnary cannot be loaded.")
         end
 
         BikerGang.Clubhouse.Emblem.stage = 1
