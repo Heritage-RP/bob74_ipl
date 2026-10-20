@@ -241,5 +241,16 @@ CreateThread(function()
         MoneyOffice.LoadDefault() -- -1160.493, -1538.932, -50.0
     end
 
-    -- [DLC: A Safehouse in the Hills]: not loaded on Héritage RP (Heritage-RP/PRODUCTION-SERVER#82)
+    -- ====================================================================
+    -- =---------------- [DLC: A Safehouse in the Hills] -----------------=
+    -- ====================================================================
+    -- Fork: not with the convar bob74_ipl_mansions "original" (hrp/mansions.lua puts the pre-DLC map back instead)
+    if GetGameBuildNumber() >= 3717 and HrpMansions.Mode(GetConvar) == "villas" then
+        Mansion1.LoadDefault() -- 543.852, 712.754, 201.0
+        Mansion2.LoadDefault() -- -1630.434, 470.852, 128.0
+        Mansion3.LoadDefault() -- -2601.712, 1874.826, 166.0
+        MansionBasement1.LoadDefault()
+        MansionBasement2.LoadDefault()
+        MansionBasement3.LoadDefault()
+    end
 end)

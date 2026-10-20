@@ -1,17 +1,31 @@
--- Héritage RP: the villas of the DLC "A Safehouse in the Hills" (build 3717+) are not part of the map
--- (Heritage-RP/PRODUCTION-SERVER#82, #332, #367).
+-- Fork patch (PATCHES.md): the villas of the DLC "A Safehouse in the Hills" (build 3717+) can be left out of the map.
 --
--- bob74_ipl no longer loads them (dlc_mansions/*.lua are out of fxmanifest.lua and client.lua). But from build 3717 the
--- base map has no ground of its own on the three lots: the terrain is either the villa (*_mansion_shared/_generic…) or
--- the pre-DLC map (*_mansion_original, *_props_original, hei_ch1_roads_original). Loading neither leaves a hole
--- (#367: Richman, -1749, 211 looking at the Richman Villa lot). So this file does what the game's own
--- building_controller.c script does when it puts the old map back for the story missions (decompiled scripts, legacy
--- builds 3725 and 3889, same IPL names): remove every villa IPL, request every "original" IPL, hide the villa minimap
--- overlays. Checked at start then every 30 s, in case the game or another resource switches the villas on again.
+-- Replicated convar `bob74_ipl_mansions`: "villas" (default, as upstream: client.lua loads the three villas) or
+-- "original" (`setr bob74_ipl_mansions "original"`: the lots show the pre-DLC map). With "original", client.lua does not
+-- load the villas, and from build 3717 the base map has no ground of its own on the three lots: the terrain is either
+-- the villa (*_mansion_shared/_generic…) or the pre-DLC map (*_mansion_original, *_props_original,
+-- hei_ch1_roads_original). Loading neither leaves a hole (Heritage-RP/PRODUCTION-SERVER#367: Richman, -1749, 211). So
+-- this file does what the game's own building_controller.c script does when it puts the old map back for the story
+-- missions (decompiled scripts, legacy builds 3725 and 3889, same IPL names): remove every villa IPL, request every
+-- "original" IPL, hide the villa minimap overlays. Checked at start then every 30 s, in case the game or another
+-- resource switches the villas on again.
 
 HrpMansions = {
     minBuild = 3717,
     checkIntervalMs = 30000,
+    convar = "bob74_ipl_mansions",
+
+    --- What the server wants on the villa lots: "villas" (default, upstream) or "original" (the pre-DLC map).
+    --- @param getConvar fun(name: string, default: string): string
+    --- @return "villas" | "original"
+    Mode = function(getConvar)
+        local value = getConvar(HrpMansions.convar, "villas")
+        if value == "original" then return "original" end
+        if value ~= "villas" and HrpLog then
+            HrpLog.warn("unknown value of " .. HrpMansions.convar .. ", the villas stay", { value = value })
+        end
+        return "villas"
+    end,
 
     -- Minimap overlays of the villas (building_controller.c: shown with the villas, hidden with the original map).
     minimapComponents = { 20, 21, 22 },
@@ -141,7 +155,8 @@ HrpMansions = {
     end,
 }
 
-if CreateThread and GetGameBuildNumber and GetGameBuildNumber() >= HrpMansions.minBuild then
+if CreateThread and GetGameBuildNumber and GetGameBuildNumber() >= HrpMansions.minBuild
+    and HrpMansions.Mode(GetConvar) == "original" then
     CreateThread(function()
         HrpMansions.HideMinimap(SetMinimapComponent)
         while true do
