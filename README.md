@@ -4,17 +4,12 @@ The purpose of this script is to fix the holes in the map by loading zones that 
 
 This resource has been completely rewritten from scratch since v2.0. You can customize almost every storymode and online purchasable interiors from your own resources.
 
-## Héritage RP fork
+## Fork (Heritage-RP)
 
-- **A Safehouse in the Hills**: the villas are not part of the Héritage RP map; their three lots show the pre-DLC map.
-  `dlc_mansions/*.lua` are not loaded, and `hrp/mansions.lua` (build 3717+, at start then every 30 s) does what the
-  game's `building_controller` script does to bring the old map back: `RemoveIpl` on the 57 villa IPLs (including
-  `*_mansion_generic` and `hei_ch1_roads_mansion`), `RequestIpl` on the 12 `*_original` IPLs (terrain, collision, props,
-  `hei_ch1_roads_original`), minimap components 20-22 hidden. From build 3717 the base map has no ground of its own on
-  the lots: loading neither the villa nor the original IPLs leaves a hole (Heritage-RP/PRODUCTION-SERVER#367).
-- **Logs**: no `print`; warnings and errors go through `HrpLog` (`@hrp-metrics/lib/log.lua`, first client script; it
-  loads even when hrp-metrics starts later).
-- **Tests**: `tests/run.sh` (every `tests/lua/*_spec.lua` in Lua 5.4 through docker; run by `just test` in PRODUCTION-SERVER)
+Fork used by the core of [Heritage-RP/PRODUCTION-SERVER](https://github.com/Heritage-RP). Its patches are listed in
+[PATCHES.md](PATCHES.md): the villa lots switch (replicated convar `bob74_ipl_mansions`: `villas` by default, as
+upstream, or `original` for the pre-DLC map on the three lots of "A Safehouse in the Hills"), logs through HrpLog, Lua
+tests (`tests/run.sh`).
 
 ## Download
 - Latest version: https://github.com/Bob74/bob74_ipl/releases/latest

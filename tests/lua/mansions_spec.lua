@@ -1,4 +1,4 @@
--- Héritage RP checks (Heritage-RP/PRODUCTION-SERVER#82, #332, #367). Run from the resource folder:
+-- Fork checks (PATCHES.md, Heritage-RP/PRODUCTION-SERVER#82, #332, #367, #476). Run from the resource folder:
 --   docker run --rm -v "$PWD":/w -w /w nickblah/lua:5.4 lua tests/lua/mansions_spec.lua
 -- (or any Lua 5.4: `lua tests/lua/mansions_spec.lua`).
 
@@ -133,7 +133,25 @@ do
     check('Sweep logs the restore', #logs == 2 and logs[2].attrs.requested == 1)
 end
 
--- 4. Manifest and loader: the DLC scripts are not loaded, the removal and HrpLog are.
+-- 4. The convar picks the lots: villas (default, upstream) or the pre-DLC map.
+do
+    local function mode(value)
+        return M.Mode(function(name, default)
+            check('Mode reads bob74_ipl_mansions', name == 'bob74_ipl_mansions' and default == 'villas')
+            return value or default
+        end)
+    end
+    local warned = {}
+    _G.HrpLog = { warn = function(msg, attrs) warned[#warned + 1] = attrs end }
+    check('unset: villas (upstream)', mode(nil) == 'villas')
+    check('"villas": villas', mode('villas') == 'villas')
+    check('"original": the pre-DLC map', mode('original') == 'original')
+    check('no warning for known values', #warned == 0)
+    check('unknown value: villas', mode('ORIGINAL') == 'villas')
+    check('unknown value: warned once', #warned == 1 and warned[1].value == 'ORIGINAL')
+end
+
+-- 5. Manifest and loader: the DLC scripts load as upstream, the villas only without "original", the sweep only with it.
 do
     local manifest = read('fxmanifest.lua')
     local active = {}
@@ -142,16 +160,21 @@ do
         active[#active + 1] = code
     end
     local code = table.concat(active, '\n')
-    check('no dlc_mansions script in the manifest', not code:find('dlc_mansions/', 1, true))
-    check('hrp/mansions.lua in the manifest', code:find('"hrp/mansions.lua"', 1, true) ~= nil)
+    check('dlc_mansions scripts in the manifest', code:find('"dlc_mansions/mansion1.lua"', 1, true) ~= nil)
+    local mansions = code:find('"hrp/mansions.lua"', 1, true)
+    check('hrp/mansions.lua in the manifest, after the DLC scripts',
+        mansions ~= nil and mansions > code:find('"dlc_mansions/mansion_basement3.lua"', 1, true))
     local first = code:match('client_scripts%s*{%s*"([^"]+)"')
     check('HrpLog is the first client script', first == '@hrp-metrics/lib/log.lua')
 
     local client = read('client.lua')
-    check('client.lua does not load the villas', not client:find('Mansion%w*%.LoadDefault'))
+    check('client.lua loads the villas only in "villas" mode',
+        client:find('GetGameBuildNumber%(%) >= 3717 and HrpMansions%.Mode%(GetConvar%) == "villas" then%s+Mansion1%.LoadDefault') ~= nil)
+    check('the sweep thread only in "original" mode',
+        read('hrp/mansions.lua'):find('HrpMansions%.Mode%(GetConvar%) == "original" then%s+CreateThread') ~= nil)
 end
 
--- 5. No print left (HRP rule: third-party Lua logs through @hrp-metrics/lib/log.lua).
+-- 6. No print left (HRP rule: third-party Lua logs through @hrp-metrics/lib/log.lua).
 do
     local pipe = assert(io.popen("find . -name '*.lua' -not -path './tests/*'"))
     for path in pipe:lines() do
